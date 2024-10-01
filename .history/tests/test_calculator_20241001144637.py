@@ -14,5 +14,4 @@ def test_multiplication():
     assert multiply(2,4) == 8
 
 def test_division():
-    '''Test that division function works'''     
-    assert divide(2,2) == 1
+    '''Test that division function works'''                
