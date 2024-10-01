@@ -7,4 +7,4 @@ def test_addition():
 
 def test_subtraction():
     '''Test that addition function works '''    
-    assert subtract(2,2) == 0
+    assert subtract(2,2) == 
