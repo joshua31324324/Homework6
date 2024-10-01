@@ -4,11 +4,6 @@ def add(a,b):
 def subtract(a,b):
     return a - b
 
-def multiply(a,b):
-    return a *b
-
-def divide(a, b):
-    return a / b
 '''
 
 This Python code defines a Calculator class that provides a simple interface for performing arithmetic operations (addition, subtraction, multiplication, division) on Decimal numbers. The class uses static methods, demonstrating a functional approach within an object-oriented context. 
