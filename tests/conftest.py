@@ -1,10 +1,23 @@
-# conftest.py
 import pytest
 from decimal import Decimal
-from calculator1 import Calculator1
+from faker import Faker
 from calculator.operations import add, subtract, multiply, divide
 
-fake = Faker()
+fake = Faker ()
+@pytest.fixture
+def fake_data():
+    fake = Faker()
+    return {
+        'name': fake.name(),
+        'address': fake.address(),
+        'email': fake.email()
+    }
+
+def test_example(fake_data):
+    assert isinstance(fake_data['name'], str)
+    assert isinstance(fake_data['address'], str)
+    assert isinstance(fake_data['email'], str)
+
 
 def generate_test_data(num_records):
     # Define operation mappings for both Calculator and Calculation tests
@@ -18,6 +31,7 @@ def generate_test_data(num_records):
     for _ in range(num_records):
         a = Decimal(fake.random_number(digits=2))
         b = Decimal(fake.random_number(digits=2)) if _ % 12 != 6 else Decimal(fake.random_number(digits=1))
+ 
         operation_name = fake.random_element(elements=list(operation_mappings.keys()))
         operation_func = operation_mappings[operation_name]
         
@@ -49,3 +63,25 @@ def pytest_generate_tests(metafunc):
         # Modify parameters to fit test functions' expectations
         modified_parameters = [(a, b, op_name if 'operation_name' in metafunc.fixturenames else op_func, expected) for a, b, op_name, op_func, expected in parameters]
         metafunc.parametrize("a,b,operation,expected", modified_parameters)
+def pytest_addoption(parser):
+    parser.addoption("--num_records", action="store", default=10, type=int, help="Number of records to generate")
+
+def pytest_generate_tests(metafunc):
+    if 'a' in metafunc.fixturenames and 'b' in metafunc.fixturenames and 'operation' in metafunc.fixturenames and 'expected' in metafunc.fixturenames:
+        num_records = metafunc.config.getoption('num_records')
+        fake = Faker()
+        test_data = []
+        for _ in range(num_records):
+            a = fake.random_int(min=1, max=100)
+            b = fake.random_int(min=1, max=100)
+            operation = fake.random_element(elements=('add', 'subtract', 'multiply', 'divide'))
+            if operation == 'add':
+                expected = a + b
+            elif operation == 'subtract':
+                expected = a - b
+            elif operation == 'multiply':
+                expected = a * b
+            elif operation == 'divide':
+                expected = a / b if b != 0 else None
+            test_data.append((a, b, operation, expected))
+        metafunc.parametrize("a,b,operation,expected", test_data)
