@@ -1,0 +1,6 @@
+
+calculator = Calculator()
+add_number = AddCommand(Calculator)
+subtract_number = SubtractCommand(Calculator)
+multiply_number = MultiplyCommand(Calculator)
+divide_number = DivideCommand(Calculator)
