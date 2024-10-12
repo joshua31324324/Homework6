@@ -1,5 +1,6 @@
 import pytest
-from main import calculate_and_print  # Ensure this import matches your project structure
+from main import calculate_and_print, main # Ensure this import matches your project structure
+from unittest.mock import patch
 
 # Parameterize the test function to cover different operations and scenarios, including errors
 @pytest.mark.parametrize("a_string, b_string, operation_string, expected_string", [
@@ -16,3 +17,39 @@ def test_calculate_and_print(a_string, b_string, operation_string,expected_strin
     calculate_and_print(a_string, b_string, operation_string)
     captured = capsys.readouterr()
     assert captured.out.strip() == expected_string
+    
+
+def test_main_add_command():
+    user_inputs = iter(['add 16 2', 'exit'])
+    with patch('builtins.input', lambda _: next(user_inputs)):
+        with patch('builtins.print') as mocked_print:
+            main()
+            mocked_print.assert_any_call('Result: 18.0')
+
+def test_main_subtract_command():
+    user_inputs = iter(['subtract 16 2', 'exit'])
+    with patch('builtins.input', lambda _: next(user_inputs)):
+        with patch('builtins.print') as mocked_print:
+            main()
+            mocked_print.assert_any_call('Result: 18.0')
+
+def test_main_multiply_command():
+    user_inputs = iter(['multiply 16 2', 'exit'])
+    with patch('builtins.input', lambda _: next(user_inputs)):
+        with patch('builtins.print') as mocked_print:
+            main()
+            mocked_print.assert_any_call('Result: 32.0')
+
+def test_main_add_command():
+    user_inputs = iter(['divide 16 2', 'exit'])
+    with patch('builtins.input', lambda _: next(user_inputs)):
+        with patch('builtins.print') as mocked_print:
+            main()
+            mocked_print.assert_any_call('Result: 8.0')
+
+def test_main_invalid_command():
+    user_inputs = iter(['foo 1 1', 'exit'])
+    with patch('builtins.input', lambda _: next(user_inputs)):
+        with patch('builtins.print') as mocked_print:
+            main()
+            mocked_print.assert_any_call("Unknown command 'foo'. Please use add, subtract, multiply, or divide.")
