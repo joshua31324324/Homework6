@@ -1,10 +1,11 @@
 import sys
-from app import App
+from plugins import App
 from calculator import Calculator
 from decimal import Decimal, InvalidOperation
 from commands import AddCommand, SubtractCommand, MultiplyCommand, DivideCommand
-from plugin_interface import PluginInterface
-import plugin_loader
+from plugins import PluginInterface, plugin_loader
+from commands import commands, display_menu
+
 
 def main():
     if len(sys.argv) != 4:
@@ -44,6 +45,21 @@ def main():
             print(f"Result: {result}")
         except ValueError as ve:
             print(ve)
+            user_input = input("Enter command: ").strip().lower()
+
+        if user_input == "menu":
+            display_menu()
+        elif user_input == "exit":
+            print("Exiting the application...")
+            break
+        elif user_input in commands:
+            print(f"Executing command: {user_input} - {commands[user_input]}")
+        else:
+            print("Unknown command. Type 'menu' to see available commands.")
+    display_menu()
+
+
+        
 
 def calculate_and_print(a, b, operation_name):
     operation_mappings = {

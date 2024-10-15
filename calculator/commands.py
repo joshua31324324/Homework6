@@ -35,3 +35,15 @@ class DivideCommand(Command):
 
     def execute(self):
         return self.calculator.divide(self.a, self.b)
+
+commands = {
+    "help": "Displays the help menu",
+    "start": "Starts the application",
+    "exit": "Exits the application",
+    "menu": "Displays the command menu"
+}
+
+def display_menu():
+    print("Available commands:")
+    for command, description in commands.items():
+        print(f"{command}: {description}")
